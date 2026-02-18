@@ -19,4 +19,4 @@ knex.raw('SELECT 1+1 AS result')
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-})
+});
