@@ -1,5 +1,31 @@
 services:
-  server:
+  db: #PosgreSQL service
+    container_name: postgres
+    image: postgres:18-alpine
+    restart: always
+    shm_size: 256mb
+
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  adminer: # Adminer Database Management Web portal
+    container_name: db-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  server: # Express backend service
     build:
       context: ./server
       dockerfile: dockerfile
@@ -12,9 +38,14 @@ services:
       - "3000:3000"
 
     environment:
-      - PORT=3000
+      PORT: 3000
+      DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME} #user:password@service:port/dbname
+
+    depends_on:
+      db:
+        condition: service_healthy
     
-  client:
+  client: # Vite frontend service
     build:
       context: ./client
       dockerfile: dockerfile
@@ -28,3 +59,6 @@ services:
 
     depends_on:
       - server
+
+volumes:
+  postgres_data:
