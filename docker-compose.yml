@@ -44,6 +44,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+    command: >
+      sh -c "npx knex migrate:latest && npm run dev"
     
   client: # Vite frontend service
     build:
