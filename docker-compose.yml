@@ -1,0 +1,30 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: dockerfile
+    
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      - PORT=3000
+    
+  client:
+    build:
+      context: ./client
+      dockerfile: dockerfile
+
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+    ports:
+      - "5173:5173"
+
+    depends_on:
+      - server
