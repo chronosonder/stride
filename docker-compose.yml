@@ -26,6 +26,7 @@ services:
       - 8080:8080
 
   server: # Express backend service
+    container_name: server
     build:
       context: ./server
       dockerfile: dockerfile
@@ -49,6 +50,7 @@ services:
       sh -c "npx knex migrate:latest && npm run dev"
     
   client: # Vite frontend service
+    container_name: client
     build:
       context: ./client
       dockerfile: dockerfile
