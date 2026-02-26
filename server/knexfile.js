@@ -16,6 +16,17 @@ module.exports = {
     }
   },
 
+  test: {
+    client: 'postgresql',
+    connection: process.env.TEST_DATABASE_URL,
+    migrations: {
+      directory: './src/db/migrations'
+    },
+    seeds: {
+      directory: './src/db/seeds'
+    }
+  },
+
   staging: {
     client: 'postgresql',
     connection: process.env.DATABASE_URL,
