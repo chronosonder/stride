@@ -4,7 +4,7 @@ const User = require('../models/User');
 class UserRepository {
 
     static async create(username, email, passwordHash, trx) {
-        const db = knex || trx;
+        const db = trx || knex;
         const [row] = await db('users').
             insert({
                 username,
@@ -13,29 +13,29 @@ class UserRepository {
             })
             .returning('*');
 
-        return mapRowToUser(row);
+        return this.mapRowToUser(row);
     }
 
     static async getByEmail(email, trx) {
-        const db = knex || trx;
+        const db = trx || knex;
         const row = await db('users')
             .where({ email })
             .first();
 
-        return mapRowToUser(row);
+        return this.mapRowToUser(row);
     }
 
     static async getById(id, trx) {
-        const db = knex || trx;
+        const db = trx || knex;
         const row = await db('users')
             .where({ user_id: id })
             .first();
 
-        return mapRowToUser(row);
+        return this.mapRowToUser(row);
     }
 
     static async update(id, updates, trx) {
-        const db = knex || trx;
+        const db = trx || knex;
         const updateData = {};
         if (updates.username) updateData.username = updates.username;
         if (updates.email) updateData.email = updates.email;
@@ -47,11 +47,11 @@ class UserRepository {
             .update(updateData)
             .returning('*');
 
-        return mapRowToUser(row);
+        return this.mapRowToUser(row);
     }
 
     static async delete(id, trx) {
-        const db = knex || trx;
+        const db = trx || knex;
         const rowCount = await db('users')
             .where({ user_id: id })
             .del();
@@ -63,7 +63,7 @@ class UserRepository {
     static mapRowToUser(row) {
         if (!row) return null;
         return new User(
-            row.id,
+            row.user_id,
             row.username,
             row.email,
             row.password_hash,
