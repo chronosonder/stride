@@ -5,8 +5,12 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true, // allow access on local network
+    watch: {
+      usePolling: true, // docker polling for file changes
+    },
     proxy: { // API proxy to avoid CORS issues
-      '/api': 'http://localhost:3000', 
+      '/api': 'http://localhost:3000',
     },
   }
 })
