@@ -96,7 +96,7 @@ exports.down = function (knex) {
     return knex.raw(` DROP TRIGGER IF EXISTS update_users_updated_at ON users;
     DROP TRIGGER IF EXISTS update_tasks_updated_at ON tasks;
     DROP TRIGGER IF EXISTS update_projects_updated_at ON projects;
-    DROP FUNCTION IF EXISTS update_timestamp();
+    DROP FUNCTION IF EXISTS update_timestamp() CASCADE;
     DROP TABLE IF EXISTS tasks;
     DROP TABLE IF EXISTS projects;
     DROP TABLE IF EXISTS users;
