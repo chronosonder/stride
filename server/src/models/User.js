@@ -20,7 +20,9 @@ class User {
     }
 
     // Compare User object hashed password with provided password using
-    async veirfyPassword(password, bcrypt) {
+    async verifyPassword(password, bcrypt) {
         return await bcrypt.compare(password, this.passwordHash);
     }
 }
+
+module.exports = User;
