@@ -43,7 +43,7 @@ const authController = {
 
     account: asyncHandler(async (req, res) => {
         const userId = req.user.id;
-        const user = await authService.account(userId);
+        const user = await authService.getById(userId);
 
         res.json({
             success: true,

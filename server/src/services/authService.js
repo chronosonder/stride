@@ -46,7 +46,7 @@ const authService = {
      * @returns {Promise<User>}
      */
     async update(userId, updates) {
-        if (updates.length === 0) throw new BadRequestError('No fields to update');
+        if (Object.keys(updates).length === 0) throw new BadRequestError('No fields to update');
 
         if (updates.password) {
             updates.passwordHash = await bcrypt.hash(updates.password, 10);
@@ -61,7 +61,7 @@ const authService = {
      * @param {int} userId 
      * @returns 
      */
-    async account(userId) {
+    async getById(userId) {
         if (!userId) throw new BadRequestError('User ID is required');
 
         return await UserRepository.getById(userId);

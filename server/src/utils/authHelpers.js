@@ -8,8 +8,8 @@ function generateToken(user) {
     );
 };
 
-function decodeToken(authToken) {
-    return jwt.decode(authToken, process.env.JWT_SECRET);
+function verifyToken(authToken) {
+    return jwt.verify(authToken, process.env.JWT_SECRET);
 }
 
-module.exports = { generateToken, decodeToken };
+module.exports = { generateToken, verifyToken };
