@@ -29,14 +29,4 @@ app.use((req, res, next) => {
 });
 app.use(errorMiddleware);
 
-const knex = require('./db/knex');
-knex.raw('SELECT 1+1 AS result')
-    .then(() => {
-        console.log('Database connection successful!');
-    })
-    .catch((error) => {
-        console.error('Database connection failed:', error);
-        process.exit(1);
-    });
-
 module.exports = app;
