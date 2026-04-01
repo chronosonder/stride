@@ -1,6 +1,6 @@
 const app = require('./src/app');
 const knex = require('./src/db/knex');
-const port = 5000;
+const port = process.env.API_PORT || 3000;
 
 knex.raw('SELECT 1+1 AS result')
     .then(() => {
