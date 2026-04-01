@@ -8,6 +8,7 @@ const errorMiddleware = require('./middleware/errorMiddleware');
 //Route imports
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const taskRoutes = require('./routes/taskRoutes');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 //Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/projects/:projectId/tasks', taskRoutes);
 
 //Error handling middleware
 app.use((req, res, next) => {
