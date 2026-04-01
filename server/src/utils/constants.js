@@ -1,10 +1,21 @@
 // Immutable constants for the project status 
-PROJECT_STATUSES = Object.freeze({
+const PROJECT_STATUSES = Object.freeze({
     ACTIVE: 'active',
     COMPLETED: 'completed',
     CANCELLED: 'cancelled'
 });
 
-module.exports = {
-    PROJECT_STATUSES
-};
+const TASK_STATUSES = Object.freeze({
+    TODO: 'to-do',
+    IN_PROGRESS: 'in-progress',
+    DONE: 'done'
+});
+ 
+const TASK_TYPES = Object.freeze({
+    TASK: 'task',
+    SUBTASK: 'subtask',
+    MILESTONE: 'milestone',
+    DELIVERABLE: 'deliverable'
+});
+ 
+module.exports = { PROJECT_STATUSES, TASK_STATUSES, TASK_TYPES };
