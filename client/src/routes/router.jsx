@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import ProtectedRoute from './ProtectedRoute';
 import GuestRoute from './GuestRoute';
+import Layout from '../components/layout/Layout';
 
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
@@ -11,13 +12,12 @@ const router = createBrowserRouter([
     { path: '/login', element: <GuestRoute><LoginPage /></GuestRoute> },
     { path: '/register', element: <GuestRoute><RegisterPage /></GuestRoute> },
     {
-        path: '/',
-        element: <ProtectedRoute><DashboardPage /></ProtectedRoute>
-    },
-    {
-        path: '/projects/:id',
-        element: <ProtectedRoute><ProjectPage /></ProtectedRoute>
-    },
+        element: <ProtectedRoute><Layout /></ProtectedRoute>,
+        children: [
+            { path: '/', element: <DashboardPage /> },
+            { path: '/projects/:id', element: <ProjectPage /> },
+        ]
+    }
 ]);
 
 export default router;
