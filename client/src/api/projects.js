@@ -10,7 +10,7 @@ export const createProject = (name, description) =>
     request('POST', '/projects', { name, description });
 
 export const updateProject = (projectId, updates) =>
-    request('PATCH', `/projects/${projectId}`, updates);
+    request('PUT', `/projects/${projectId}`, updates);
 
 export const deleteProject = (projectId) =>
     request('DELETE', `/projects/${projectId}`);
