@@ -7,6 +7,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    MenuItem,
     Stack,
     TextField,
 } from '@mui/material';
@@ -23,22 +24,32 @@ export default function ProjectFormDialog({
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [status, setStatus] = useState('active');
 
     // Populate or reset fields each time the dialog opens
     useEffect(() => {
         if (!open) return;
         setName(initialValues?.name ?? '');
         setDescription(initialValues?.description ?? '');
-    }, [open, initialValues?.name, initialValues?.description]);
+        setStatus(initialValues?.status ?? 'active');
+    }, [open, initialValues?.name, initialValues?.description, initialValues?.status]);
 
     function handleSubmit(e) {
         e.preventDefault();
         const trimmedName = name.trim();
         if (!trimmedName) return;
-        onSubmit({
+
+        const payload = {
             name: trimmedName,
             description: description.trim() || null,
-        });
+        };
+
+        // Status is only editable in edit mode
+        if (isEditMode) {
+            payload.status = status;
+        }
+
+        onSubmit(payload);
     }
 
     return (
@@ -51,7 +62,7 @@ export default function ProjectFormDialog({
                 <DialogContent>
                     <Stack spacing={2} sx={{ mt: 1 }}>
                         {error && <Alert severity="error">{error}</Alert>}
-                        
+
                         <TextField
                             label="Name"
                             value={name}
@@ -71,6 +82,21 @@ export default function ProjectFormDialog({
                             minRows={3}
                             disabled={isSubmitting}
                         />
+
+                        {isEditMode && (
+                            <TextField
+                                select
+                                label="Status"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                fullWidth
+                                disabled={isSubmitting}
+                            >
+                                <MenuItem value="active">Active</MenuItem>
+                                <MenuItem value="completed">Completed</MenuItem>
+                                <MenuItem value="cancelled">Cancelled</MenuItem>
+                            </TextField>
+                        )}
                     </Stack>
                 </DialogContent>
 

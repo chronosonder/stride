@@ -41,9 +41,9 @@ export default function ProjectHeader({ project }) {
         setEditOpen(false);
     }
 
-    function handleEditSubmit({ name, description }) {
+    function handleEditSubmit({ name, description, status }) {
         updateProjectMutation.mutate(
-            { projectId: project.id, updates: { name, description } },
+            { projectId: project.id, updates: { name, description, status } },
             { onSuccess: () => setEditOpen(false) }
         );
     }
