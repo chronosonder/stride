@@ -46,7 +46,6 @@ function formatDueDate(dueDate) {
 
 const chipSx = { '& .MuiChip-label': { fontWeight: 500 } };
 
-
 export default function TaskCard({
     task,
     onClick,
@@ -63,7 +62,6 @@ export default function TaskCard({
     const [expanded, setExpanded] = useState(hasSubtasks);
 
     const isDone = task.status === 'done';
-    const isInProgress = task.status === 'in-progress';
 
     const typeChip = taskTypeChipProps(task.taskType);
     const dueDate = formatDueDate(task.dueDate);
@@ -113,7 +111,7 @@ export default function TaskCard({
                 }}
             >
                 <CardContent sx={{ pb: 1.5, '&:last-child': { pb: 1.5 } }}>
-                    {/* Top row: checkbox + title + type chip */}
+                     {/* Top row: checkbox + title + type chip */}
                     <Box display="flex" alignItems="flex-start" gap={0.5}>
                         <Checkbox
                             size="small"
@@ -168,7 +166,7 @@ export default function TaskCard({
                         </Box>
                     </Box>
 
-                    {/* Meta row */}
+                    {/* Metadata row */}
                     <Box
                         display="flex"
                         alignItems="center"
@@ -177,16 +175,6 @@ export default function TaskCard({
                         mt={1.25}
                         pl={4}
                     >
-                        {isInProgress && (
-                            <Chip
-                                label="In Progress"
-                                color="primary"
-                                size="small"
-                                variant="outlined"
-                                sx={chipSx}
-                            />
-                        )}
-
                         {hasSubtasks && (
                             <Button
                                 size="small"
