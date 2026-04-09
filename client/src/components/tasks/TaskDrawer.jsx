@@ -7,10 +7,13 @@ import {
     Divider,
     Drawer,
     IconButton,
+    MenuItem,
+    Select,
     Stack,
     Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TaskFormDialog from './TaskFormDialog';
 import AddSubtaskInput from './AddSubtaskInput';
 import SubtaskRow from './SubtaskRow';
@@ -50,6 +53,12 @@ function formatDueDate(dueDate) {
 
 const chipSx = { '& .MuiChip-label': { fontWeight: 500 } };
 
+const TASK_TYPE_OPTIONS = [
+    { value: 'task', label: 'Task' },
+    { value: 'deliverable', label: 'Deliverable' },
+    { value: 'milestone', label: 'Milestone' },
+];
+
 function SectionLabel({ children }) {
     return (
         <Typography
@@ -61,6 +70,51 @@ function SectionLabel({ children }) {
         >
             {children}
         </Typography>
+    );
+}
+
+/**
+ * Chip-styled Select for changing task type inline.
+ * Renders as a clickable chip; clicking opens a dropdown.
+ */
+function TaskTypeChipSelect({ value, onChange, disabled }) {
+    const chip = taskTypeChipProps(value);
+
+    return (
+        <Select
+            value={value ?? 'task'}
+            onChange={(e) => onChange(e.target.value)}
+            disabled={disabled}
+            variant="standard"
+            disableUnderline
+            renderValue={(val) => {
+                const c = taskTypeChipProps(val);
+                return (
+                    <Chip
+                        icon={<ExpandMoreIcon fontSize="small" />}
+                        label={c.label}
+                        color={c.color}
+                        size="small"
+                        sx={{ ...chipSx, cursor: 'pointer' }}
+                    />
+                );
+            }}
+            sx={{
+                '& .MuiSelect-select': {
+                    p: 0,
+                    pr: '0 !important',
+                    display: 'flex',
+                    alignItems: 'center',
+                },
+                '& .MuiSelect-icon': { display: 'none' },
+            }}
+        >
+            {TASK_TYPE_OPTIONS.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                </MenuItem>
+            ))}
+        </Select>
     );
 }
 
@@ -123,7 +177,14 @@ export default function TaskDrawer({
         onCreateSubtask?.(task, { title });
     }
 
-    const typeChip = task ? taskTypeChipProps(task.taskType) : null;
+    function handleTypeChange(nextType) {
+        if (!task || nextType === task.taskType) return;
+        updateTaskMutation.mutate({
+            taskId: task.id,
+            updates: { taskType: nextType },
+        });
+    }
+
     const statusChip = task ? taskStatusChipProps(task.status) : null;
     const subtasks = task?.subtasks ?? [];
     const completedCount = subtasks.filter((s) => s.status === 'done').length;
@@ -186,12 +247,11 @@ export default function TaskDrawer({
                         </Box>
 
                         {task && (
-                            <Box display="flex" gap={1} flexWrap="wrap" pl={4.5}>
-                                <Chip
-                                    label={typeChip.label}
-                                    color={typeChip.color}
-                                    size="small"
-                                    sx={chipSx}
+                            <Box display="flex" gap={1} flexWrap="wrap" alignItems="center" pl={4.5}>
+                                <TaskTypeChipSelect
+                                    value={task.taskType}
+                                    onChange={handleTypeChange}
+                                    disabled={updateTaskMutation.isPending}
                                 />
                                 <Chip
                                     label={statusChip.label}
