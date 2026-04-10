@@ -37,18 +37,11 @@ services:
       timeout: 5s
       retries: 5
 
-  adminer: # Adminer Database Management Web portal
-    container_name: db-adminer
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
   server: # Express backend service
     container_name: server
     build:
       context: ./server
-      dockerfile: dockerfile
+      dockerfile: dockerfile.dev
     
     volumes:
       - ./server:/app
@@ -58,6 +51,8 @@ services:
       - "3000:3000"
 
     environment:
+      NODE_ENV: development
+      CLIENT_URL: http://localhost:5173
       PORT: 3000
       TEST_DATABASE_URL: postgres://${DATABASE_USER}:${TEST_PASSWORD}@db-test:5432/${TEST_DATABASE_NAME}
       DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME} #user:password@service:port/dbname
@@ -76,8 +71,11 @@ services:
     container_name: client
     build:
       context: ./client
-      dockerfile: dockerfile
+      dockerfile: dockerfile.dev
 
+    environment:
+      VITE_API_URL: http://localhost:3000
+    
     volumes:
       - ./client:/app
       - /app/node_modules

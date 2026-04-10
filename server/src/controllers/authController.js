@@ -1,6 +1,8 @@
 const authService = require('../services/authService');
 const asyncHandler = require('../middleware/asyncHandler');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const authController = {
     register: asyncHandler(async (req, res) => {
         const { username, email, password } = req.body;
@@ -19,8 +21,8 @@ const authController = {
         // Set token as HTTP-only cookie
         res.cookie('token', token, {
             httpOnly: true,
-            sameSite: 'none',
-            secure: process.env.NODE_ENV === 'production', // HTTPS in production
+            sameSite: isProduction ? 'none' : 'lax', // Allow cross-site cookies in production
+            secure: isProduction, // HTTPS in production
             maxAge: 24 * 60 * 60 * 1000 // 24 hours in milliseconds
         });
 
@@ -64,8 +66,8 @@ const authController = {
     logout: asyncHandler(async (req, res) => {
         res.clearCookie('token', {
             httpOnly: true,
-            sameSite: 'none',
-            secure: process.env.NODE_ENV === 'production'
+            sameSite: isProduction ? 'none' : 'lax',
+            secure: isProduction,
         });
 
         res.json({
