@@ -212,7 +212,7 @@ export default function TaskCard({
             {/* Subtasks section */}
             {hasSubtasks ? (
                 <Collapse in={expanded} unmountOnExit>
-                    <Box px={2} pb={2} pt={0} pl={4.5}>
+                    <Box px={2} pb={1.5} pt={0} pl={4.5}>
                         <Stack spacing={0.25}>
                             {subtasks.map((subtask) => (
                                 <SubtaskRow
@@ -232,7 +232,7 @@ export default function TaskCard({
                     </Box>
                 </Collapse>
             ) : (
-                <Box px={2} pb={2} pt={0} pl={4.5}>
+                <Box px={2} pb={1.5} mt={0.5} pt={0} pl={4.5}>
                     <AddSubtaskInput
                         onAdd={handleAddSubtask}
                         isPending={isCreatingSubtask}
