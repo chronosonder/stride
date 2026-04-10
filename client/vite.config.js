@@ -9,8 +9,5 @@ export default defineConfig({
     watch: {
       usePolling: true, // docker polling for file changes
     },
-    proxy: { // API proxy to avoid CORS issues
-      '/api': 'http://localhost:3000',
-    },
   }
 })
